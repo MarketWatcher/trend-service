@@ -14,12 +14,24 @@ case class Alert(id: Int, name: String)
 @Singleton
 class ServiceController @Inject() extends Controller {
 
-  var cluster = Cluster.builder()
-    .addContactPoint(System.getenv("CASSANDRA_NODES"))
-    .withPort(9042)
-    .build()
+  val clusterBuilder = Cluster.builder()
 
-  var session = cluster.connect()
+  try {
+    System
+      .getenv("CASSANDRA_NODES")
+      .split(",")
+      .foreach(node => {
+        val nodeInfo = node.split(":")
+        clusterBuilder.addContactPoint(nodeInfo(0)).withPort(Integer.valueOf(nodeInfo(1)))
+      })
+  } catch {
+    case e: Exception => println(
+      """Invalid value for CASSANDRA_NODES. Nodes must explicitly specify their ports
+and must be separated with commas. Example: hosta:9042,hostb:9042""".stripMargin)
+  }
+
+  val cluster = clusterBuilder.build()
+  val session = cluster.connect()
 
   initDatabase()
 
@@ -28,7 +40,7 @@ class ServiceController @Inject() extends Controller {
   }
 
   def trends(alertId: String) = Action {
-    val rows = session.execute("SELECT * FROM trends.trend where alert_id = " + UUID.fromString(alertId));
+    val rows = session.execute("SELECT * FROM trends.trend where alert_id = " + UUID.fromString(alertId))
     val count = rows.one().getInt("count")
     Ok(Json.toJson(count))
   }
