@@ -1,4 +1,3 @@
-GET     /                           controllers.ServiceController.index
-GET     /trends/:alertId            controllers.ServiceController.trends(alertId: String)
+GET     /trends/alert-id/:alertId            controllers.TrendController.trends(alertId: java.util.UUID)
 
 
