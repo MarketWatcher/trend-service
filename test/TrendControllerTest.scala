@@ -3,16 +3,14 @@ import java.util.UUID
 
 import dal.{CassandraService, UpdateCountRepository}
 import models.Trend
-import org.mockito.Mockito
+import org.mockito.Mockito.when
+import org.scalatest.mock.MockitoSugar._
 import org.scalatestplus.play._
+import play.api.inject._
+import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.libs.json.Json
 import play.api.test.Helpers._
 import play.api.test._
-import play.test.WithApplication
-import org.scalatest.mock.MockitoSugar._
-import org.mockito.Mockito.when
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.inject._
-import play.api.libs.json.Json
 
 class TrendControllerTest extends PlaySpec with OneAppPerTest {
 
