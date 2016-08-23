@@ -7,6 +7,7 @@ import scala.io.Source._
 
 @Singleton
 class CassandraService{
+
   private var session: Session = null
 
   def getSession: Session = {
@@ -36,6 +37,8 @@ and must be separated with commas. Example: hosta:9042,hostb:9042""".stripMargin
 
     session
   }
+
+  getSession
 
   private def initDatabase(session: Session): Unit = {
     fromInputStream(getClass.getResourceAsStream("/init.cql"))

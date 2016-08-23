@@ -12,7 +12,7 @@ import play.api.libs.json.Json
 import play.api.test.Helpers._
 import play.api.test._
 
-class TrendControllerTest extends PlaySpec with OneAppPerTest {
+class TrendControllerTest extends PlaySpec {
 
   "TrendController" should {
     "return a positive trend" in {
@@ -22,6 +22,7 @@ class TrendControllerTest extends PlaySpec with OneAppPerTest {
       when(mockUpdateCountRepository.getUpdateCountsByAlertId(existingUUID)).thenReturn(updateCounts)
 
       val mockApp = new GuiceApplicationBuilder()
+        .disable(classOf[Module])
         .overrides(bind[CassandraService].toInstance(mock[CassandraService]))
         .overrides(bind[UpdateCountRepository].toInstance(mockUpdateCountRepository))
         .build
@@ -38,6 +39,7 @@ class TrendControllerTest extends PlaySpec with OneAppPerTest {
       when(mockUpdateCountRepository.getUpdateCountsByAlertId(existingUUID)).thenReturn(updateCounts)
 
       val mockApp = new GuiceApplicationBuilder()
+        .disable(classOf[Module])
         .overrides(bind[CassandraService].toInstance(mock[CassandraService]))
         .overrides(bind[UpdateCountRepository].toInstance(mockUpdateCountRepository))
         .build
@@ -47,7 +49,12 @@ class TrendControllerTest extends PlaySpec with OneAppPerTest {
     }
 
     "return bad request when alert id is not a uuid" in {
-      status(route(app, FakeRequest(GET, "/trends/alert-id/NOT_UUUID")).get) mustBe BAD_REQUEST
+      val mockApp = new GuiceApplicationBuilder()
+        .disable(classOf[Module])
+        .overrides(bind[CassandraService].toInstance(mock[CassandraService]))
+        .overrides(bind[UpdateCountRepository].toInstance(mock[UpdateCountRepository]))
+        .build
+      status(route(mockApp, FakeRequest(GET, "/trends/alert-id/NOT_UUUID")).get) mustBe BAD_REQUEST
     }
 
 
@@ -57,6 +64,7 @@ class TrendControllerTest extends PlaySpec with OneAppPerTest {
       when(mockUpdateCountRepository.getUpdateCountsByAlertId(nonexistingUUID)).thenReturn(new util.ArrayList[Int])
 
       val mockApp = new GuiceApplicationBuilder()
+        .disable(classOf[Module])
         .overrides(bind[CassandraService].toInstance(mock[CassandraService]))
         .overrides(bind[UpdateCountRepository].toInstance(mockUpdateCountRepository))
         .build
@@ -71,6 +79,7 @@ class TrendControllerTest extends PlaySpec with OneAppPerTest {
       when(mockUpdateCountRepository.getUpdateCountsByAlertId(existingUUID)).thenReturn(updateCounts)
 
       val mockApp = new GuiceApplicationBuilder()
+        .disable(classOf[Module])
         .overrides(bind[CassandraService].toInstance(mock[CassandraService]))
         .overrides(bind[UpdateCountRepository].toInstance(mockUpdateCountRepository))
         .build
