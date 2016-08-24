@@ -1,5 +1,7 @@
 FROM java:8
 
+COPY scripts/wait-for-it.sh /wait-for-it.sh
+
 COPY target/universal/trend-service-1.0-SNAPSHOT.zip /opt/
 
 WORKDIR /opt

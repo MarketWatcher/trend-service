@@ -10,7 +10,7 @@ import com.datastax.driver.core.Row
 class UpdateCountRepository @Inject() (cassandra: CassandraService) {
 
   def getUpdateCountsByAlertId(alertId: UUID, limit:Int = 2) : List[Int] = {
-    val rows = cassandra.getSession.execute("SELECT * FROM trends.trend where alert_id=" + alertId + " ORDER BY id LIMIT " + limit)
+    val rows = cassandra.getSession.execute("SELECT * FROM trends.trend where alert_id=" + alertId + " ORDER BY id DESC LIMIT " + limit)
 
     val updateCounts = new ArrayList[Int]
 

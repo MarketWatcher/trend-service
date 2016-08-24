@@ -1,3 +1,1 @@
-GET     /trends/alert-id/:alertId            controllers.TrendController.trends(alertId: java.util.UUID)
-
-
+GET     /api/trends/alert-id/:alertId            controllers.TrendController.trends(alertId: java.util.UUID)
